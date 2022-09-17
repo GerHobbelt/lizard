@@ -7,8 +7,8 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#ifndef MEM_H_MODULE
-#define MEM_H_MODULE
+#ifndef MEM_H_MODULE_LIZARD
+#define MEM_H_MODULE_LIZARD
 
 #if defined (__cplusplus)
 extern "C" {
@@ -369,4 +369,4 @@ MEM_STATIC U32 MEM_readMINMATCH(const void* memPtr, U32 length)
 }
 #endif
 
-#endif /* MEM_H_MODULE */
+#endif /* MEM_H_MODULE_LIZARD */

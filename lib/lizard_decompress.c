@@ -92,8 +92,8 @@ FORCE_INLINE size_t Lizard_readStream(int flag, const BYTE** ip, const BYTE* con
         comprStreamLen = MEM_readLE24(*ip + 3);
 
         if ((op > oend - streamLen) || (*ip + comprStreamLen > iend - 6)) return 0;
-        res = HUF_decompress(op, streamLen, *ip + 6, comprStreamLen);
-        if (HUF_isError(res) || (res != streamLen)) return 0;
+        res = HUF_LIZARD_decompress(op, streamLen, *ip + 6, comprStreamLen);
+        if (HUF_LIZARD_isError(res) || (res != streamLen)) return 0;
         
         *ip += comprStreamLen + 6;
         *streamPtr = op;
@@ -147,11 +147,11 @@ FORCE_INLINE int Lizard_decompress_generic(
 
     LIZARD_LOG_DECOMPRESS("Lizard_decompress_generic ip=%p inputSize=%d targetOutputSize=%d dest=%p outputSize=%d cLevel=%d dict=%d dictSize=%d dictStart=%p partialDecoding=%d\n", ip, inputSize, targetOutputSize, dest, outputSize, compressionLevel, dict, (int)dictSize, dictStart, partialDecoding);
 
-    decompLiteralsBase = (BYTE*)malloc(4*LIZARD_HUF_BLOCK_SIZE);
+    decompLiteralsBase = (BYTE*)malloc(4*LIZARD_HUF_LIZARD_BLOCK_SIZE);
     if (!decompLiteralsBase) return -1;
-    decompFlagsBase = decompLiteralsBase + LIZARD_HUF_BLOCK_SIZE;
-    decompOff24Base = decompFlagsBase + LIZARD_HUF_BLOCK_SIZE;
-    decompOff16Base = decompOff24Base + LIZARD_HUF_BLOCK_SIZE;
+    decompFlagsBase = decompLiteralsBase + LIZARD_HUF_LIZARD_BLOCK_SIZE;
+    decompOff24Base = decompFlagsBase + LIZARD_HUF_LIZARD_BLOCK_SIZE;
+    decompOff16Base = decompOff24Base + LIZARD_HUF_LIZARD_BLOCK_SIZE;
 
 #ifdef LIZARD_STATS
     init_stats();
@@ -197,25 +197,25 @@ FORCE_INLINE int Lizard_decompress_generic(
             const BYTE* ipos;
             size_t comprFlagsLen, comprLiteralsLen, total;
 #endif
-            streamLen = Lizard_readStream(res&LIZARD_FLAG_OFFSET16, &ip, iend, decompOff16Base, decompOff16Base + LIZARD_HUF_BLOCK_SIZE, &ctx.offset16Ptr, &ctx.offset16End, LIZARD_STREAM_OFFSET16);
+            streamLen = Lizard_readStream(res&LIZARD_FLAG_OFFSET16, &ip, iend, decompOff16Base, decompOff16Base + LIZARD_HUF_LIZARD_BLOCK_SIZE, &ctx.offset16Ptr, &ctx.offset16End, LIZARD_STREAM_OFFSET16);
             if (streamLen == 0) goto _output_error;
 
-            streamLen = Lizard_readStream(res&LIZARD_FLAG_OFFSET24, &ip, iend, decompOff24Base, decompOff24Base + LIZARD_HUF_BLOCK_SIZE, &ctx.offset24Ptr, &ctx.offset24End, LIZARD_STREAM_OFFSET24);
+            streamLen = Lizard_readStream(res&LIZARD_FLAG_OFFSET24, &ip, iend, decompOff24Base, decompOff24Base + LIZARD_HUF_LIZARD_BLOCK_SIZE, &ctx.offset24Ptr, &ctx.offset24End, LIZARD_STREAM_OFFSET24);
             if (streamLen == 0) goto _output_error;
 
 #ifdef LIZARD_USE_LOGS
             ipos = ip;
-            streamLen = Lizard_readStream(res&LIZARD_FLAG_FLAGS, &ip, iend, decompFlagsBase, decompFlagsBase + LIZARD_HUF_BLOCK_SIZE, &ctx.flagsPtr, &ctx.flagsEnd, LIZARD_STREAM_FLAGS);
+            streamLen = Lizard_readStream(res&LIZARD_FLAG_FLAGS, &ip, iend, decompFlagsBase, decompFlagsBase + LIZARD_HUF_LIZARD_BLOCK_SIZE, &ctx.flagsPtr, &ctx.flagsEnd, LIZARD_STREAM_FLAGS);
             if (streamLen == 0) goto _output_error;
             streamLen = (size_t)(ctx.flagsEnd-ctx.flagsPtr);
             comprFlagsLen = ((size_t)(ip - ipos) + 3 >= streamLen) ? 0 : (size_t)(ip - ipos);
             ipos = ip;
 #else
-            streamLen = Lizard_readStream(res&LIZARD_FLAG_FLAGS, &ip, iend, decompFlagsBase, decompFlagsBase + LIZARD_HUF_BLOCK_SIZE, &ctx.flagsPtr, &ctx.flagsEnd, LIZARD_STREAM_FLAGS);
+            streamLen = Lizard_readStream(res&LIZARD_FLAG_FLAGS, &ip, iend, decompFlagsBase, decompFlagsBase + LIZARD_HUF_LIZARD_BLOCK_SIZE, &ctx.flagsPtr, &ctx.flagsEnd, LIZARD_STREAM_FLAGS);
             if (streamLen == 0) goto _output_error;
 #endif
 
-            streamLen = Lizard_readStream(res&LIZARD_FLAG_LITERALS, &ip, iend, decompLiteralsBase, decompLiteralsBase + LIZARD_HUF_BLOCK_SIZE, &ctx.literalsPtr, &ctx.literalsEnd, LIZARD_STREAM_LITERALS);
+            streamLen = Lizard_readStream(res&LIZARD_FLAG_LITERALS, &ip, iend, decompLiteralsBase, decompLiteralsBase + LIZARD_HUF_LIZARD_BLOCK_SIZE, &ctx.literalsPtr, &ctx.literalsEnd, LIZARD_STREAM_LITERALS);
             if (streamLen == 0) goto _output_error;
 #ifdef LIZARD_USE_LOGS
             streamLen = (size_t)(ctx.literalsEnd-ctx.literalsPtr);
