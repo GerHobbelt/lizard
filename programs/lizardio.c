@@ -398,7 +398,7 @@ static int LizardIO_compressFilename_extRess(cRess_t ress, const char* srcFileNa
         if (LizardF_isError(cSize)) EXM_THROW(31, "Compression failed : %s", LizardF_getErrorName(cSize));
         compressedfilesize = cSize;
         DISPLAYUPDATE(2, "\rRead : %u MB   ==> %.2f%%   ",
-                      (unsigned)(filesize>>20), (double)compressedfilesize/(filesize+!filesize)*100);   /* avoid division by zero */
+                      (unsigned)(filesize>>20), (double)compressedfilesize/(double)(filesize+!filesize)*100);   /* avoid division by zero */
 
         /* Write Block */
         {   size_t const sizeCheck = fwrite(dstBuffer, 1, cSize, dstFile);
@@ -424,7 +424,7 @@ static int LizardIO_compressFilename_extRess(cRess_t ress, const char* srcFileNa
             outSize = LizardF_compressUpdate(ctx, dstBuffer, dstBufferSize, srcBuffer, readSize, NULL);
             if (LizardF_isError(outSize)) EXM_THROW(35, "Compression failed : %s", LizardF_getErrorName(outSize));
             compressedfilesize += outSize;
-            DISPLAYUPDATE(2, "\rRead : %u MB   ==> %.2f%%   ", (unsigned)(filesize>>20), (double)compressedfilesize/filesize*100);
+            DISPLAYUPDATE(2, "\rRead : %u MB   ==> %.2f%%   ", (unsigned)(filesize>>20), (double)compressedfilesize/(double)filesize*100);
 
             /* Write Block */
             { size_t const sizeCheck = fwrite(dstBuffer, 1, outSize, dstFile);
@@ -460,7 +460,7 @@ static int LizardIO_compressFilename_extRess(cRess_t ress, const char* srcFileNa
     /* Final Status */
     DISPLAYLEVEL(2, "\r%79s\r", "");
     DISPLAYLEVEL(2, "Compressed %llu bytes into %llu bytes ==> %.2f%%\n",
-        filesize, compressedfilesize, (double)compressedfilesize/(filesize + !filesize)*100);   /* avoid division by zero */
+        filesize, compressedfilesize, (double)compressedfilesize/(double)(filesize + !filesize)*100);   /* avoid division by zero */
 
     return 0;
 }

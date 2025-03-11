@@ -109,7 +109,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;LIZARD_DLL_EXPORT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <EnablePREfast>true</EnablePREfast>
-      <AdditionalOptions>/analyze:stacksize295252 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/analyze:stacksize565500 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -144,7 +144,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;LIZARD_DLL_EXPORT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
       <EnablePREfast>true</EnablePREfast>
-      <AdditionalOptions>/analyze:stacksize295252 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/analyze:stacksize565500 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,6 +165,7 @@
     <ClCompile Include="..\..\..\lib\entropy\fse_decompress.c" />
     <ClCompile Include="..\..\..\lib\entropy\huf_compress.c" />
     <ClCompile Include="..\..\..\lib\entropy\huf_decompress.c" />
+    <ClCompile Include="..\..\..\lib\entropy\hist.c" />
     <ClCompile Include="..\..\..\lib\lizard_compress.c" />
     <ClCompile Include="..\..\..\lib\lizard_decompress.c" />
     <ClCompile Include="..\..\..\lib\lizard_frame.c" />

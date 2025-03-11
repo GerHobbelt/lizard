@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\..\lib\entropy\fse_decompress.c" />
     <ClCompile Include="..\..\..\lib\entropy\huf_compress.c" />
     <ClCompile Include="..\..\..\lib\entropy\huf_decompress.c" />
+    <ClCompile Include="..\..\..\lib\entropy\hist.c" />
     <ClCompile Include="..\..\..\lib\lizard_compress.c" />
     <ClCompile Include="..\..\..\lib\lizard_decompress.c" />
     <ClCompile Include="..\..\..\lib\lizard_frame.c" />

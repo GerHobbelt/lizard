@@ -1,3 +1,6 @@
+Lizard v1.1
+- updated New Generation Entropy coders (FiniteStateEntropy) to 2024-03-10
+
 Lizard v1.0
 - LZ5 v2.0 was renamed to Lizard v1.0
 - improved compression speed with many small files

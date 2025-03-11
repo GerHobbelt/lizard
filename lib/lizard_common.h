@@ -414,7 +414,7 @@ MEM_STATIC U32 Lizard_highbit32(U32 val)
 /*-************************************
 *  Common functions
 **************************************/
-MEM_STATIC unsigned Lizard_NbCommonBytes (register size_t val)
+MEM_STATIC unsigned Lizard_NbCommonBytes (size_t val)
 {
     if (MEM_isLittleEndian()) {
         if (MEM_64bits()) {
