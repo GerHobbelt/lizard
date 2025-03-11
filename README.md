@@ -33,7 +33,7 @@ Back in 2017, Lizard 1.0 filled a niche between [LZ4] and [zstd] in terms of com
 Benchmarks
 -------------------------
 
-The following results were obtained using [lzbench 1.9](https://github.com/inikep/lzbench), built with `gcc 14.2.0` and executed with the options ` -t16,16 -o1c4 -elz4/lz4hc/lizard/zstd_fast/zstd/zlib/brotli`.
+The following results were obtained using [lzbench 2.0](https://github.com/inikep/lzbench), built with `gcc 14.2.0` and executed with the options ` -t16,16 -o1c4 -elz4/lz4hc/lizard/zstd_fast/zstd/zlib/brotli`.
 The tests were run on a single core of an AMD EPYC 9554 processor at 3.10 GHz, with the CPU governor set to `performance` and turbo
 boost disabled for stability. The operating system was `Ubuntu 24.04.1`, and the benchmark made use of
 [`silesia.tar`](https://github.com/DataCompression/corpus-collection/tree/main/Silesia-Corpus), which contains tarred files from the
@@ -55,46 +55,46 @@ boost disabled for stability. The operating system was `Ubuntu 24.04.1`, and the
 | lz4hc 1.10.0 -10        |  21.4 MB/s |  3604 MB/s |    77596766 | 36.61 |
 | lz4hc 1.10.0 -11        |  12.5 MB/s |  3630 MB/s |    77315480 | 36.48 |
 | lz4hc 1.10.0 -12        |  10.5 MB/s |  3622 MB/s |    77262620 | 36.45 |
-| lizard 1.1 -10          |   479 MB/s |  2056 MB/s |   103402971 | 48.79 |
-| lizard 1.1 -11          |   310 MB/s |  1846 MB/s |    93861621 | 44.29 |
-| lizard 1.1 -12          |   164 MB/s |  1896 MB/s |    86232422 | 40.69 |
-| lizard 1.1 -13          |   104 MB/s |  1923 MB/s |    83773119 | 39.53 |
-| lizard 1.1 -14          |  91.9 MB/s |  1943 MB/s |    82205976 | 38.79 |
-| lizard 1.1 -15          |  79.5 MB/s |  1989 MB/s |    81187330 | 38.31 |
-| lizard 1.1 -16          |  56.9 MB/s |  1840 MB/s |    79372512 | 37.45 |
-| lizard 1.1 -17          |  27.3 MB/s |  1881 MB/s |    78041714 | 36.82 |
-| lizard 1.1 -18          |  6.67 MB/s |  1885 MB/s |    77586984 | 36.61 |
-| lizard 1.1 -19          |  4.65 MB/s |  1901 MB/s |    77416400 | 36.53 |
-| lizard 1.1 -20          |   383 MB/s |  1596 MB/s |    96924204 | 45.73 |
-| lizard 1.1 -21          |   226 MB/s |  1665 MB/s |    89239174 | 42.10 |
-| lizard 1.1 -22          |   159 MB/s |  1626 MB/s |    84866725 | 40.04 |
-| lizard 1.1 -23          |  65.7 MB/s |  1676 MB/s |    81052209 | 38.24 |
-| lizard 1.1 -24          |  37.0 MB/s |  1693 MB/s |    78170875 | 36.88 |
-| lizard 1.1 -25          |  22.7 MB/s |  1656 MB/s |    75131286 | 35.45 |
-| lizard 1.1 -26          |  6.45 MB/s |  1693 MB/s |    72459161 | 34.19 |
-| lizard 1.1 -27          |  4.52 MB/s |  1714 MB/s |    70447615 | 33.24 |
-| lizard 1.1 -28          |  2.42 MB/s |  1734 MB/s |    69762972 | 32.92 |
-| lizard 1.1 -29          |  2.11 MB/s |  1727 MB/s |    68694227 | 32.41 |
-| lizard 1.1 -30          |   360 MB/s |  1149 MB/s |    85727429 | 40.45 |
-| lizard 1.1 -31          |   260 MB/s |  1286 MB/s |    81688522 | 38.54 |
-| lizard 1.1 -32          |   161 MB/s |  1228 MB/s |    78652654 | 37.11 |
-| lizard 1.1 -33          |   148 MB/s |  1355 MB/s |    76929454 | 36.30 |
-| lizard 1.1 -34          |  97.7 MB/s |  1414 MB/s |    75427930 | 35.59 |
-| lizard 1.1 -35          |  87.0 MB/s |  1469 MB/s |    74563583 | 35.18 |
-| lizard 1.1 -36          |  75.9 MB/s |  1494 MB/s |    73850400 | 34.84 |
-| lizard 1.1 -37          |  55.0 MB/s |  1438 MB/s |    71854743 | 33.90 |
-| lizard 1.1 -38          |  26.9 MB/s |  1496 MB/s |    70968686 | 33.48 |
-| lizard 1.1 -39          |  4.43 MB/s |  1455 MB/s |    69807522 | 32.94 |
-| lizard 1.1 -40          |   295 MB/s |  1107 MB/s |    80843049 | 38.14 |
-| lizard 1.1 -41          |   190 MB/s |  1162 MB/s |    76100661 | 35.91 |
-| lizard 1.1 -42          |   139 MB/s |  1187 MB/s |    73350988 | 34.61 |
-| lizard 1.1 -43          |  61.1 MB/s |  1276 MB/s |    70927858 | 33.46 |
-| lizard 1.1 -44          |  34.7 MB/s |  1299 MB/s |    68763512 | 32.44 |
-| lizard 1.1 -45          |  21.7 MB/s |  1299 MB/s |    66676653 | 31.46 |
-| lizard 1.1 -46          |  11.2 MB/s |  1170 MB/s |    65413061 | 30.86 |
-| lizard 1.1 -47          |  6.04 MB/s |  1234 MB/s |    63704146 | 30.06 |
-| lizard 1.1 -48          |  4.26 MB/s |  1256 MB/s |    62097965 | 29.30 |
-| lizard 1.1 -49          |  2.01 MB/s |  1271 MB/s |    60679215 | 28.63 |
+| lizard 2.1 -10          |   484 MB/s |  2161 MB/s |   103402971 | 48.79 |
+| lizard 2.1 -11          |   316 MB/s |  1935 MB/s |    93861621 | 44.29 |
+| lizard 2.1 -12          |   166 MB/s |  2005 MB/s |    86232422 | 40.69 |
+| lizard 2.1 -13          |   102 MB/s |  2040 MB/s |    83773119 | 39.53 |
+| lizard 2.1 -14          |  90.3 MB/s |  2082 MB/s |    82205976 | 38.79 |
+| lizard 2.1 -15          |  77.8 MB/s |  2106 MB/s |    81187330 | 38.31 |
+| lizard 2.1 -16          |  56.0 MB/s |  1951 MB/s |    79372512 | 37.45 |
+| lizard 2.1 -17          |  26.5 MB/s |  1986 MB/s |    78041714 | 36.82 |
+| lizard 2.1 -18          |  6.67 MB/s |  1978 MB/s |    77586984 | 36.61 |
+| lizard 2.1 -19          |  4.81 MB/s |  1989 MB/s |    77416400 | 36.53 |
+| lizard 2.1 -20          |   388 MB/s |  1674 MB/s |    96924204 | 45.73 |
+| lizard 2.1 -21          |   229 MB/s |  1748 MB/s |    89239174 | 42.10 |
+| lizard 2.1 -22          |   162 MB/s |  1709 MB/s |    84866725 | 40.04 |
+| lizard 2.1 -23          |  64.5 MB/s |  1769 MB/s |    81052209 | 38.24 |
+| lizard 2.1 -24          |  36.8 MB/s |  1792 MB/s |    78170875 | 36.88 |
+| lizard 2.1 -25          |  22.3 MB/s |  1748 MB/s |    75131286 | 35.45 |
+| lizard 2.1 -26          |  6.33 MB/s |  1767 MB/s |    72459161 | 34.19 |
+| lizard 2.1 -27          |  4.46 MB/s |  1813 MB/s |    70447615 | 33.24 |
+| lizard 2.1 -28          |  2.43 MB/s |  1821 MB/s |    69762972 | 32.92 |
+| lizard 2.1 -29          |  2.13 MB/s |  1818 MB/s |    68694227 | 32.41 |
+| lizard 2.1 -30          |   363 MB/s |  1185 MB/s |    85727429 | 40.45 |
+| lizard 2.1 -31          |   263 MB/s |  1325 MB/s |    81688522 | 38.54 |
+| lizard 2.1 -32          |   164 MB/s |  1274 MB/s |    78652654 | 37.11 |
+| lizard 2.1 -33          |   151 MB/s |  1410 MB/s |    76929454 | 36.30 |
+| lizard 2.1 -34          |  96.6 MB/s |  1477 MB/s |    75427930 | 35.59 |
+| lizard 2.1 -35          |  85.7 MB/s |  1542 MB/s |    74563583 | 35.18 |
+| lizard 2.1 -36          |  74.7 MB/s |  1573 MB/s |    73850400 | 34.84 |
+| lizard 2.1 -37          |  54.5 MB/s |  1521 MB/s |    71854743 | 33.90 |
+| lizard 2.1 -38          |  26.2 MB/s |  1565 MB/s |    70968686 | 33.48 |
+| lizard 2.1 -39          |  4.66 MB/s |  1509 MB/s |    69807522 | 32.94 |
+| lizard 2.1 -40          |   297 MB/s |  1141 MB/s |    80843049 | 38.14 |
+| lizard 2.1 -41          |   192 MB/s |  1202 MB/s |    76100661 | 35.91 |
+| lizard 2.1 -42          |   142 MB/s |  1231 MB/s |    73350988 | 34.61 |
+| lizard 2.1 -43          |  59.7 MB/s |  1325 MB/s |    70927858 | 33.46 |
+| lizard 2.1 -44          |  34.4 MB/s |  1353 MB/s |    68763512 | 32.44 |
+| lizard 2.1 -45          |  21.7 MB/s |  1345 MB/s |    66676653 | 31.46 |
+| lizard 2.1 -46          |  11.4 MB/s |  1201 MB/s |    65413061 | 30.86 |
+| lizard 2.1 -47          |  6.07 MB/s |  1271 MB/s |    63704146 | 30.06 |
+| lizard 2.1 -48          |  4.31 MB/s |  1297 MB/s |    62097965 | 29.30 |
+| lizard 2.1 -49          |  2.08 MB/s |  1316 MB/s |    60679215 | 28.63 |
 | zstd_fast 1.5.6 --5     |   573 MB/s |  1948 MB/s |   103093752 | 48.64 |
 | zstd_fast 1.5.6 --4     |   542 MB/s |  1905 MB/s |    98825267 | 46.63 |
 | zstd_fast 1.5.6 --3     |   518 MB/s |  1818 MB/s |    94674672 | 44.67 |

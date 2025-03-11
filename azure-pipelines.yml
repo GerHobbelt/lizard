@@ -39,6 +39,22 @@ jobs:
         COMMAND_LINE: 'make -C tests test-lizard test-fullbench test-frametest test-fuzzer MOREFLAGS="-Werror -Wconversion -Wno-sign-conversion"'
 
       # clang-6 and newer compilers
+      clang-19 ASan [Ubuntu 22.04 Jammy]:
+        imageName: 'ubuntu-22.04'
+        UBUNTU_CODE_NAME: jammy
+        SOURCE_LINE: 'deb https://apt.llvm.org/$(UBUNTU_CODE_NAME)/ llvm-toolchain-$(UBUNTU_CODE_NAME)-19 main'
+        SELECTED_CC: clang-19
+        PACKAGES: 'clang-19 llvm-19-dev libclang-common-19-dev libclang-rt-19-dev'
+        COMMAND_LINE: 'make asan'
+
+      clang-19 MSan [Ubuntu 22.04 Jammy]:
+        imageName: 'ubuntu-22.04'
+        UBUNTU_CODE_NAME: jammy
+        SOURCE_LINE: 'deb https://apt.llvm.org/$(UBUNTU_CODE_NAME)/ llvm-toolchain-$(UBUNTU_CODE_NAME)-19 main'
+        SELECTED_CC: clang-19
+        PACKAGES: 'clang-19 llvm-19-dev libclang-common-19-dev libclang-rt-19-dev'
+        COMMAND_LINE: 'make msan'
+
       clang-19 [Ubuntu 22.04 Jammy]:
         imageName: 'ubuntu-22.04'
         UBUNTU_CODE_NAME: jammy

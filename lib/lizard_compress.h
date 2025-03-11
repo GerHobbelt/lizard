@@ -68,7 +68,7 @@ extern "C" {
 /*-************************************
 *  Version
 **************************************/
-#define LIZARD_VERSION_MAJOR    1    /* for breaking interface changes  */
+#define LIZARD_VERSION_MAJOR    2    /* for breaking interface changes  */
 #define LIZARD_VERSION_MINOR    1    /* for new (non-breaking) interface capabilities */
 #define LIZARD_VERSION_RELEASE  0    /* for tweaks, bug-fixes, or development */
 

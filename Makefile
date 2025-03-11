@@ -106,6 +106,20 @@ clangtest-native: clean
 sanitize: clean
 	CFLAGS="-O3 -g -DLIZARD_NO_HUFFMAN -fsanitize=undefined" $(MAKE) test CC=clang FUZZER_TIME="-T1mn" NB_LOOPS=-i1
 
+msan: clean
+	$(MAKE) CC=clang-19 CFLAGS="-DLIZARD_RESET_MEM -fsanitize=memory -fsanitize-memory-track-origins=2 -fno-omit-frame-pointer -fno-optimize-sibling-calls -g -O0"
+	./programs/lizard -i1b10e15 ./programs/lizard
+	./programs/lizard -i1b20e25 ./programs/lizard
+	./programs/lizard -i1b30e35 ./programs/lizard
+	./programs/lizard -i1b40e45 ./programs/lizard
+
+asan: clean
+	$(MAKE) CC=clang-19 CFLAGS="-DLIZARD_RESET_MEM -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -g -O0"
+	./programs/lizard -i1b10e15 ./programs/lizard
+	./programs/lizard -i1b20e25 ./programs/lizard
+	./programs/lizard -i1b30e35 ./programs/lizard
+	./programs/lizard -i1b40e45 ./programs/lizard
+
 staticAnalyze: clean
 	CFLAGS=-g scan-build --status-bugs -v $(MAKE) all
 

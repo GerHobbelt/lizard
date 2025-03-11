@@ -53,7 +53,7 @@
 #define PROGRAM_VERSION LIZARD_VERSION_STRING
 #define COMPRESSOR_NAME "Lizard command line interface"
 #define AUTHOR "Y.Collet & P.Skibinski"
-#define WELCOME_MESSAGE "%s %i-bit %s by %s (%s)\n", COMPRESSOR_NAME, (int)(sizeof(void*)*8), LIZARD_VERSION_STRING, AUTHOR, __DATE__
+#define WELCOME_MESSAGE "%s %i-bit %s (%s)\n", COMPRESSOR_NAME, (int)(sizeof(void*)*8), LIZARD_VERSION_STRING, __DATE__
 #define LIZARD_EXTENSION ".liz"
 #define LIZARDCAT "lizardcat"
 #define UNLIZARD "unlizard"
