@@ -1,7 +1,9 @@
-Lizard v1.1
+Lizard v1.1 (Jan 23, 2025)
 - updated New Generation Entropy coders (FiniteStateEntropy) to 2024-03-10
+- fixed compilation issues with gcc (versions 7.5 to 14.2) and clang (versions 6.0 to 19)
+- changed automatic CI/CD testing to Azure Pipelines
 
-Lizard v1.0
+Lizard v1.0 (Mar 15, 2017)
 - LZ5 v2.0 was renamed to Lizard v1.0
 - improved compression speed with many small files
 

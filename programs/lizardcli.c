@@ -68,6 +68,7 @@
 /*-************************************
 *  Macros
 ***************************************/
+#define PRINT_STDOUT(...)      fprintf(stdout, __VA_ARGS__)
 #define DISPLAY(...)           fprintf(stderr, __VA_ARGS__)
 #define DISPLAYLEVEL(l, ...)   if (displayLevel>=l) { DISPLAY(__VA_ARGS__); }
 static unsigned displayLevel = 2;   /* 0 : no display ; 1: errors only ; 2 : downgradable normal ; 3 : non-downgradable normal; 4 : + information */
@@ -104,54 +105,54 @@ int LizardIO_compressFilename_Legacy(const char* input_filename, const char* out
 *****************************/
 static int usage(const char* exeName)
 {
-    DISPLAY( "Usage :\n");
-    DISPLAY( "      %s [arg] [input] [output]\n", exeName);
-    DISPLAY( "\n");
-    DISPLAY( "input   : a filename\n");
-    DISPLAY( "          with no FILE, or when FILE is - or %s, read standard input\n", stdinmark);
-    DISPLAY( "Arguments :\n");
-    DISPLAY( " -10...-19 : compression method fastLZ4 = 16-bit bytewise codewords\n");
-    DISPLAY( "             higher number == more compression but slower\n");
-    DISPLAY( " -20...-29 : compression method LIZv1 = 24-bit bytewise codewords\n");
+    PRINT_STDOUT( "Usage :\n");
+    PRINT_STDOUT( "      %s [arg] [input] [output]\n", exeName);
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "input   : a filename\n");
+    PRINT_STDOUT( "          with no FILE, or when FILE is - or %s, read standard input\n", stdinmark);
+    PRINT_STDOUT( "Arguments :\n");
+    PRINT_STDOUT( " -10...-19 : compression method fastLZ4 = 16-bit bytewise codewords\n");
+    PRINT_STDOUT( "             higher number == more compression but slower\n");
+    PRINT_STDOUT( " -20...-29 : compression method LIZv1 = 24-bit bytewise codewords\n");
 #ifndef LIZARD_NO_HUFFMAN
-    DISPLAY( " -30...-39 : compression method fastLZ4 + Huffman\n");
-    DISPLAY( " -40...-49 : compression method LIZv1 + Huffman\n");
+    PRINT_STDOUT( " -30...-39 : compression method fastLZ4 + Huffman\n");
+    PRINT_STDOUT( " -40...-49 : compression method LIZv1 + Huffman\n");
 #endif
-    DISPLAY( " -d     : decompression (default for %s extension)\n", LIZARD_EXTENSION);
-    DISPLAY( " -z     : force compression\n");
-    DISPLAY( " -f     : overwrite output without prompting \n");
-    DISPLAY( "--rm    : remove source file(s) after successful de/compression \n");
-    DISPLAY( " -h/-H  : display help/long help and exit\n");
+    PRINT_STDOUT( " -d     : decompression (default for %s extension)\n", LIZARD_EXTENSION);
+    PRINT_STDOUT( " -z     : force compression\n");
+    PRINT_STDOUT( " -f     : overwrite output without prompting \n");
+    PRINT_STDOUT( "--rm    : remove source file(s) after successful de/compression \n");
+    PRINT_STDOUT( " -h/-H  : display help/long help and exit\n");
     return 0;
 }
 
 static int usage_advanced(const char* exeName)
 {
-    DISPLAY(WELCOME_MESSAGE);
+    PRINT_STDOUT(WELCOME_MESSAGE);
     usage(exeName);
-    DISPLAY( "\n");
-    DISPLAY( "Advanced arguments :\n");
-    DISPLAY( " -V     : display Version number and exit\n");
-    DISPLAY( " -v     : verbose mode\n");
-    DISPLAY( " -q     : suppress warnings; specify twice to suppress errors too\n");
-    DISPLAY( " -c     : force write to standard output, even if it is the console\n");
-    DISPLAY( " -t     : test compressed file integrity\n");
-    DISPLAY( " -m     : multiple input files (implies automatic output filenames)\n");
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "Advanced arguments :\n");
+    PRINT_STDOUT( " -V     : display Version number and exit\n");
+    PRINT_STDOUT( " -v     : verbose mode\n");
+    PRINT_STDOUT( " -q     : suppress warnings; specify twice to suppress errors too\n");
+    PRINT_STDOUT( " -c     : force write to standard output, even if it is the console\n");
+    PRINT_STDOUT( " -t     : test compressed file integrity\n");
+    PRINT_STDOUT( " -m     : multiple input files (implies automatic output filenames)\n");
 #ifdef UTIL_HAS_CREATEFILELIST
-    DISPLAY( " -r     : operate recursively on directories (sets also -m)\n");
+    PRINT_STDOUT( " -r     : operate recursively on directories (sets also -m)\n");
 #endif
-    DISPLAY( " -B#    : Block size [1-7] = 128KB, 256KB, 1MB, 4MB, 16MB, 64MB, 256MB (default : 4)\n");
-    DISPLAY( " -BD    : Block dependency (improve compression ratio)\n");
-    /* DISPLAY( " -BX    : enable block checksum (default:disabled)\n");   *//* Option currently inactive */
-    DISPLAY( "--no-frame-crc : disable stream checksum (default:enabled)\n");
-    DISPLAY( "--content-size : compressed frame includes original size (default:not present)\n");
-    DISPLAY( "--[no-]sparse  : sparse mode (default:enabled on file, disabled on stdout)\n");
-    DISPLAY( "Benchmark arguments :\n");
-    DISPLAY( " -b#    : benchmark file(s), using # compression level (default : 1) \n");
-    DISPLAY( " -e#    : test all compression levels from -bX to # (default : 1)\n");
-    DISPLAY( " -i#    : minimum evaluation time in seconds (default : 3s)\n");
-    DISPLAY( " -B#    : cut file into independent blocks of size # bytes [32+]\n");
-    DISPLAY( "                      or predefined block size [1-7] (default: 4)\n");
+    PRINT_STDOUT( " -B#    : Block size [1-7] = 128KB, 256KB, 1MB, 4MB, 16MB, 64MB, 256MB (default : 4)\n");
+    PRINT_STDOUT( " -BD    : Block dependency (improve compression ratio)\n");
+    /* PRINT_STDOUT( " -BX    : enable block checksum (default:disabled)\n");   *//* Option currently inactive */
+    PRINT_STDOUT( "--no-frame-crc : disable stream checksum (default:enabled)\n");
+    PRINT_STDOUT( "--content-size : compressed frame includes original size (default:not present)\n");
+    PRINT_STDOUT( "--[no-]sparse  : sparse mode (default:enabled on file, disabled on stdout)\n");
+    PRINT_STDOUT( "Benchmark arguments :\n");
+    PRINT_STDOUT( " -b#    : benchmark file(s), using # compression level (default : 1) \n");
+    PRINT_STDOUT( " -e#    : test all compression levels from -bX to # (default : 1)\n");
+    PRINT_STDOUT( " -i#    : minimum evaluation time in seconds (default : 3s)\n");
+    PRINT_STDOUT( " -B#    : cut file into independent blocks of size # bytes [32+]\n");
+    PRINT_STDOUT( "                      or predefined block size [1-7] (default: 4)\n");
     EXTENDED_HELP;
     return 0;
 }
@@ -159,45 +160,45 @@ static int usage_advanced(const char* exeName)
 static int usage_longhelp(const char* exeName)
 {
     usage_advanced(exeName);
-    DISPLAY( "\n");
-    DISPLAY( "****************************\n");
-    DISPLAY( "***** Advanced comment *****\n");
-    DISPLAY( "****************************\n");
-    DISPLAY( "\n");
-    DISPLAY( "Which values can [output] have ? \n");
-    DISPLAY( "---------------------------------\n");
-    DISPLAY( "[output] : a filename \n");
-    DISPLAY( "          '%s', or '-' for standard output (pipe mode)\n", stdoutmark);
-    DISPLAY( "          '%s' to discard output (test mode) \n", NULL_OUTPUT);
-    DISPLAY( "[output] can be left empty. In this case, it receives the following value :\n");
-    DISPLAY( "          - if stdout is not the console, then [output] = stdout \n");
-    DISPLAY( "          - if stdout is console : \n");
-    DISPLAY( "               + for compression, output to filename%s \n", LIZARD_EXTENSION);
-    DISPLAY( "               + for decompression, output to filename without '%s'\n", LIZARD_EXTENSION);
-    DISPLAY( "                    > if input filename has no '%s' extension : error \n", LIZARD_EXTENSION);
-    DISPLAY( "\n");
-    DISPLAY( "stdin, stdout and the console : \n");
-    DISPLAY( "--------------------------------\n");
-    DISPLAY( "To protect the console from binary flooding (bad argument mistake)\n");
-    DISPLAY( "%s will refuse to read from console, or write to console \n", exeName);
-    DISPLAY( "except if '-c' command is specified, to force output to console \n");
-    DISPLAY( "\n");
-    DISPLAY( "Simple example :\n");
-    DISPLAY( "----------------\n");
-    DISPLAY( "1 : compress 'filename' fast, using default output name 'filename.liz'\n");
-    DISPLAY( "          %s filename\n", exeName);
-    DISPLAY( "\n");
-    DISPLAY( "Short arguments can be aggregated. For example :\n");
-    DISPLAY( "----------------------------------\n");
-    DISPLAY( "2 : compress 'filename' in high compression mode, overwrite output if exists\n");
-    DISPLAY( "          %s -9 -f filename \n", exeName);
-    DISPLAY( "    is equivalent to :\n");
-    DISPLAY( "          %s -9f filename \n", exeName);
-    DISPLAY( "\n");
-    DISPLAY( "%s can be used in 'pure pipe mode'. For example :\n", exeName);
-    DISPLAY( "-------------------------------------\n");
-    DISPLAY( "3 : compress data stream from 'generator', send result to 'consumer'\n");
-    DISPLAY( "          generator | %s | consumer \n", exeName);
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "****************************\n");
+    PRINT_STDOUT( "***** Advanced comment *****\n");
+    PRINT_STDOUT( "****************************\n");
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "Which values can [output] have ? \n");
+    PRINT_STDOUT( "---------------------------------\n");
+    PRINT_STDOUT( "[output] : a filename \n");
+    PRINT_STDOUT( "          '%s', or '-' for standard output (pipe mode)\n", stdoutmark);
+    PRINT_STDOUT( "          '%s' to discard output (test mode) \n", NULL_OUTPUT);
+    PRINT_STDOUT( "[output] can be left empty. In this case, it receives the following value :\n");
+    PRINT_STDOUT( "          - if stdout is not the console, then [output] = stdout \n");
+    PRINT_STDOUT( "          - if stdout is console : \n");
+    PRINT_STDOUT( "               + for compression, output to filename%s \n", LIZARD_EXTENSION);
+    PRINT_STDOUT( "               + for decompression, output to filename without '%s'\n", LIZARD_EXTENSION);
+    PRINT_STDOUT( "                    > if input filename has no '%s' extension : error \n", LIZARD_EXTENSION);
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "stdin, stdout and the console : \n");
+    PRINT_STDOUT( "--------------------------------\n");
+    PRINT_STDOUT( "To protect the console from binary flooding (bad argument mistake)\n");
+    PRINT_STDOUT( "%s will refuse to read from console, or write to console \n", exeName);
+    PRINT_STDOUT( "except if '-c' command is specified, to force output to console \n");
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "Simple example :\n");
+    PRINT_STDOUT( "----------------\n");
+    PRINT_STDOUT( "1 : compress 'filename' fast, using default output name 'filename.liz'\n");
+    PRINT_STDOUT( "          %s filename\n", exeName);
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "Short arguments can be aggregated. For example :\n");
+    PRINT_STDOUT( "----------------------------------\n");
+    PRINT_STDOUT( "2 : compress 'filename' in high compression mode, overwrite output if exists\n");
+    PRINT_STDOUT( "          %s -9 -f filename \n", exeName);
+    PRINT_STDOUT( "    is equivalent to :\n");
+    PRINT_STDOUT( "          %s -9f filename \n", exeName);
+    PRINT_STDOUT( "\n");
+    PRINT_STDOUT( "%s can be used in 'pure pipe mode'. For example :\n", exeName);
+    PRINT_STDOUT( "-------------------------------------\n");
+    PRINT_STDOUT( "3 : compress data stream from 'generator', send result to 'consumer'\n");
+    PRINT_STDOUT( "          generator | %s | consumer \n", exeName);
     return 0;
 }
 

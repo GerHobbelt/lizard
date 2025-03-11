@@ -2,83 +2,158 @@ Lizard - efficient compression with very fast decompression
 --------------------------------------------------------
 
 Lizard (formerly LZ5) is a lossless compression algorithm which contains 4 compression methods:
-- fastLZ4 : compression levels -10...-19 are designed to give better decompression speed than [LZ4] i.e. over 2000 MB/s
-- LIZv1 : compression levels -20...-29 are designed to give better ratio than [LZ4] keeping 75% decompression speed
+- fastLZ4 : compression levels -10...-19 are designed to give fast decompression speed
+- LIZv1 : compression levels -20...-29 are designed to give better compression ratio keeping 75% of decompression speed
 - fastLZ4 + Huffman : compression levels -30...-39 add Huffman coding to fastLZ4
-- LIZv1 + Huffman : compression levels -40...-49 give the best ratio (comparable to [zlib] and low levels of [zstd]/[brotli]) at decompression speed of 1000 MB/s 
+- LIZv1 + Huffman : compression levels -40...-49 give the best ratio (comparable to [zlib] and low levels of [zstd]/[brotli])
 
 Lizard library is based on frequently used [LZ4] library by Yann Collet but the Lizard compression format is not compatible with LZ4.
 Lizard library is provided as open-source software using BSD 2-Clause license.
 The high compression/decompression speed is achieved without any SSE and AVX extensions.
 
 
-|Branch      |Status   |
-|------------|---------|
-|lz5_v1.5    | [![Build Status][travis15Badge]][travisLink]    [![Build status][Appveyor15Badge]][AppveyorLink]     |
-|lizard      | [![Build Status][travis20Badge]][travisLink]    [![Build status][Appveyor20Badge]][AppveyorLink]     |
+|Status   |
+|---------|
+| [![Build Status][AzurePipelinesMasterBadge]][AzurePipelinesLink] |
 
-[travis15Badge]: https://travis-ci.org/inikep/lizard.svg?branch=lz5_v1.5 "Continuous Integration test suite"
-[travis20Badge]: https://travis-ci.org/inikep/lizard.svg?branch=lizard "Continuous Integration test suite"
-[travisLink]: https://travis-ci.org/inikep/lizard
-[Appveyor15Badge]: https://ci.appveyor.com/api/projects/status/cqw7emcuqge369p0/branch/lz5_v1.5?svg=true "Visual test suite"
-[Appveyor20Badge]: https://ci.appveyor.com/api/projects/status/cqw7emcuqge369p0/branch/lizard?svg=true "Visual test suite"
-[AppveyorLink]: https://ci.appveyor.com/project/inikep/lizard
+[AzurePipelinesMasterBadge]: https://dev.azure.com/inikep/lzbench/_apis/build/status%2Finikep.lizard?branchName=lizard "gcc and clang tests"
+[AzurePipelinesLink]: https://dev.azure.com/inikep/lzbench/_build/latest?definitionId=11&branchName=lizard
+
 [LZ4]: https://github.com/lz4/lz4
 [zlib]: https://github.com/madler/zlib
 [zstd]: https://github.com/facebook/zstd
 [brotli]: https://github.com/google/brotli
 
 
+2025 Update
+--------------------------------------------------------
+Back in 2017, Lizard 1.0 filled a niche between [LZ4] and [zstd] in terms of compression ratio, as well as compression and decompression speed. However, based on benchmarks conducted in 2025 (shared below), both LZ4 and zstd have made substantial advancements, particularly in compression and decompression speed, leaving Lizard outdated and effectively obsolete.
+
+
 Benchmarks
 -------------------------
 
-The following results are obtained with [lzbench](https://github.com/inikep/lzbench) and `-t16,16`
-using 1 core of Intel Core i5-4300U, Windows 10 64-bit (MinGW-w64 compilation under gcc 6.2.0)
-with [silesia.tar] which contains tarred files from [Silesia compression corpus](http://sun.aei.polsl.pl/~sdeor/index.php?page=silesia).
+The following results were obtained using [lzbench 1.9](https://github.com/inikep/lzbench), built with `gcc 14.2.0` and executed with the options ` -t16,16 -o1c4 -elz4/lz4hc/lizard/zstd_fast/zstd/zlib/brotli`.
+The tests were run on a single core of an AMD EPYC 9554 processor at 3.10 GHz, with the CPU governor set to `performance` and turbo
+boost disabled for stability. The operating system was `Ubuntu 24.04.1`, and the benchmark made use of
+[`silesia.tar`](https://github.com/DataCompression/corpus-collection/tree/main/Silesia-Corpus), which contains tarred files from the
+[Silesia compression corpus](http://sun.aei.polsl.pl/~sdeor/index.php?page=silesia).
 
 | Compressor name         | Compression| Decompress.| Compr. size | Ratio |
 | ---------------         | -----------| -----------| ----------- | ----- |
-| memcpy                  |  7332 MB/s |  8719 MB/s |   211947520 |100.00 |
-| lz4 1.7.3               |   440 MB/s |  2318 MB/s |   100880800 | 47.60 |
-| lz4hc 1.7.3 -1          |    98 MB/s |  2121 MB/s |    87591763 | 41.33 |
-| lz4hc 1.7.3 -4          |    55 MB/s |  2259 MB/s |    79807909 | 37.65 |
-| lz4hc 1.7.3 -9          |    22 MB/s |  2315 MB/s |    77892285 | 36.75 |
-| lz4hc 1.7.3 -12         |    17 MB/s |  2323 MB/s |    77849762 | 36.73 |
-| lz4hc 1.7.3 -16         |    10 MB/s |  2323 MB/s |    77841782 | 36.73 |
-| lizard 1.0 -10          |   346 MB/s |  2610 MB/s |   103402971 | 48.79 |
-| lizard 1.0 -12          |   103 MB/s |  2458 MB/s |    86232422 | 40.69 |
-| lizard 1.0 -15          |    50 MB/s |  2552 MB/s |    81187330 | 38.31 |
-| lizard 1.0 -19          |  3.04 MB/s |  2497 MB/s |    77416400 | 36.53 |
-| lizard 1.0 -21          |   157 MB/s |  1795 MB/s |    89239174 | 42.10 |
-| lizard 1.0 -23          |    30 MB/s |  1778 MB/s |    81097176 | 38.26 |
-| lizard 1.0 -26          |  6.63 MB/s |  1734 MB/s |    74503695 | 35.15 |
-| lizard 1.0 -29          |  1.37 MB/s |  1634 MB/s |    68694227 | 32.41 |
-| lizard 1.0 -30          |   246 MB/s |   909 MB/s |    85727429 | 40.45 |
-| lizard 1.0 -32          |    94 MB/s |  1244 MB/s |    76929454 | 36.30 |
-| lizard 1.0 -35          |    47 MB/s |  1435 MB/s |    73850400 | 34.84 |
-| lizard 1.0 -39          |  2.94 MB/s |  1502 MB/s |    69807522 | 32.94 |
-| lizard 1.0 -41          |   126 MB/s |   961 MB/s |    76100661 | 35.91 |
-| lizard 1.0 -43          |    28 MB/s |  1101 MB/s |    70955653 | 33.48 |
-| lizard 1.0 -46          |  6.25 MB/s |  1073 MB/s |    65413061 | 30.86 |
-| lizard 1.0 -49          |  1.27 MB/s |  1064 MB/s |    60679215 | 28.63 |
-| zlib 1.2.8 -1           |    66 MB/s |   244 MB/s |    77259029 | 36.45 |
-| zlib 1.2.8 -6           |    20 MB/s |   263 MB/s |    68228431 | 32.19 |
-| zlib 1.2.8 -9           |  8.37 MB/s |   266 MB/s |    67644548 | 31.92 |
-| zstd 1.1.1 -1           |   235 MB/s |   645 MB/s |    73659468 | 34.75 |
-| zstd 1.1.1 -2           |   181 MB/s |   600 MB/s |    70168955 | 33.11 |
-| zstd 1.1.1 -5           |    88 MB/s |   565 MB/s |    65002208 | 30.67 |
-| zstd 1.1.1 -8           |    31 MB/s |   619 MB/s |    61026497 | 28.79 |
-| zstd 1.1.1 -11          |    16 MB/s |   613 MB/s |    59523167 | 28.08 |
-| zstd 1.1.1 -15          |  4.97 MB/s |   639 MB/s |    58007773 | 27.37 |
-| zstd 1.1.1 -18          |  2.87 MB/s |   583 MB/s |    55294241 | 26.09 |
-| zstd 1.1.1 -22          |  1.44 MB/s |   505 MB/s |    52731930 | 24.88 |
-| brotli 0.5.2 -0         |   217 MB/s |   244 MB/s |    78226979 | 36.91 |
-| brotli 0.5.2 -2         |    96 MB/s |   283 MB/s |    68066621 | 32.11 |
-| brotli 0.5.2 -5         |    24 MB/s |   312 MB/s |    60801716 | 28.69 |
-| brotli 0.5.2 -8         |  5.56 MB/s |   324 MB/s |    57382470 | 27.07 |
-| brotli 0.5.2 -11        |  0.39 MB/s |   266 MB/s |    51138054 | 24.13 |
+| memcpy                  | 16253 MB/s | 16151 MB/s |   211947520 |100.00 |
+| lz4 1.10.0              |   579 MB/s |  3728 MB/s |   100880800 | 47.60 |
+| lz4hc 1.10.0 -1         |   265 MB/s |  3225 MB/s |    89135429 | 42.06 |
+| lz4hc 1.10.0 -2         |   265 MB/s |  3227 MB/s |    89135429 | 42.06 |
+| lz4hc 1.10.0 -3         |  92.7 MB/s |  3373 MB/s |    81342421 | 38.38 |
+| lz4hc 1.10.0 -4         |  76.6 MB/s |  3429 MB/s |    79807909 | 37.65 |
+| lz4hc 1.10.0 -5         |  62.6 MB/s |  3474 MB/s |    78895329 | 37.22 |
+| lz4hc 1.10.0 -6         |  51.4 MB/s |  3494 MB/s |    78385708 | 36.98 |
+| lz4hc 1.10.0 -7         |  42.7 MB/s |  3511 MB/s |    78102452 | 36.85 |
+| lz4hc 1.10.0 -8         |  36.1 MB/s |  3525 MB/s |    77957479 | 36.78 |
+| lz4hc 1.10.0 -9         |  31.0 MB/s |  3531 MB/s |    77884448 | 36.75 |
+| lz4hc 1.10.0 -10        |  21.4 MB/s |  3604 MB/s |    77596766 | 36.61 |
+| lz4hc 1.10.0 -11        |  12.5 MB/s |  3630 MB/s |    77315480 | 36.48 |
+| lz4hc 1.10.0 -12        |  10.5 MB/s |  3622 MB/s |    77262620 | 36.45 |
+| lizard 1.1 -10          |   479 MB/s |  2056 MB/s |   103402971 | 48.79 |
+| lizard 1.1 -11          |   310 MB/s |  1846 MB/s |    93861621 | 44.29 |
+| lizard 1.1 -12          |   164 MB/s |  1896 MB/s |    86232422 | 40.69 |
+| lizard 1.1 -13          |   104 MB/s |  1923 MB/s |    83773119 | 39.53 |
+| lizard 1.1 -14          |  91.9 MB/s |  1943 MB/s |    82205976 | 38.79 |
+| lizard 1.1 -15          |  79.5 MB/s |  1989 MB/s |    81187330 | 38.31 |
+| lizard 1.1 -16          |  56.9 MB/s |  1840 MB/s |    79372512 | 37.45 |
+| lizard 1.1 -17          |  27.3 MB/s |  1881 MB/s |    78041714 | 36.82 |
+| lizard 1.1 -18          |  6.67 MB/s |  1885 MB/s |    77586984 | 36.61 |
+| lizard 1.1 -19          |  4.65 MB/s |  1901 MB/s |    77416400 | 36.53 |
+| lizard 1.1 -20          |   383 MB/s |  1596 MB/s |    96924204 | 45.73 |
+| lizard 1.1 -21          |   226 MB/s |  1665 MB/s |    89239174 | 42.10 |
+| lizard 1.1 -22          |   159 MB/s |  1626 MB/s |    84866725 | 40.04 |
+| lizard 1.1 -23          |  65.7 MB/s |  1676 MB/s |    81052209 | 38.24 |
+| lizard 1.1 -24          |  37.0 MB/s |  1693 MB/s |    78170875 | 36.88 |
+| lizard 1.1 -25          |  22.7 MB/s |  1656 MB/s |    75131286 | 35.45 |
+| lizard 1.1 -26          |  6.45 MB/s |  1693 MB/s |    72459161 | 34.19 |
+| lizard 1.1 -27          |  4.52 MB/s |  1714 MB/s |    70447615 | 33.24 |
+| lizard 1.1 -28          |  2.42 MB/s |  1734 MB/s |    69762972 | 32.92 |
+| lizard 1.1 -29          |  2.11 MB/s |  1727 MB/s |    68694227 | 32.41 |
+| lizard 1.1 -30          |   360 MB/s |  1149 MB/s |    85727429 | 40.45 |
+| lizard 1.1 -31          |   260 MB/s |  1286 MB/s |    81688522 | 38.54 |
+| lizard 1.1 -32          |   161 MB/s |  1228 MB/s |    78652654 | 37.11 |
+| lizard 1.1 -33          |   148 MB/s |  1355 MB/s |    76929454 | 36.30 |
+| lizard 1.1 -34          |  97.7 MB/s |  1414 MB/s |    75427930 | 35.59 |
+| lizard 1.1 -35          |  87.0 MB/s |  1469 MB/s |    74563583 | 35.18 |
+| lizard 1.1 -36          |  75.9 MB/s |  1494 MB/s |    73850400 | 34.84 |
+| lizard 1.1 -37          |  55.0 MB/s |  1438 MB/s |    71854743 | 33.90 |
+| lizard 1.1 -38          |  26.9 MB/s |  1496 MB/s |    70968686 | 33.48 |
+| lizard 1.1 -39          |  4.43 MB/s |  1455 MB/s |    69807522 | 32.94 |
+| lizard 1.1 -40          |   295 MB/s |  1107 MB/s |    80843049 | 38.14 |
+| lizard 1.1 -41          |   190 MB/s |  1162 MB/s |    76100661 | 35.91 |
+| lizard 1.1 -42          |   139 MB/s |  1187 MB/s |    73350988 | 34.61 |
+| lizard 1.1 -43          |  61.1 MB/s |  1276 MB/s |    70927858 | 33.46 |
+| lizard 1.1 -44          |  34.7 MB/s |  1299 MB/s |    68763512 | 32.44 |
+| lizard 1.1 -45          |  21.7 MB/s |  1299 MB/s |    66676653 | 31.46 |
+| lizard 1.1 -46          |  11.2 MB/s |  1170 MB/s |    65413061 | 30.86 |
+| lizard 1.1 -47          |  6.04 MB/s |  1234 MB/s |    63704146 | 30.06 |
+| lizard 1.1 -48          |  4.26 MB/s |  1256 MB/s |    62097965 | 29.30 |
+| lizard 1.1 -49          |  2.01 MB/s |  1271 MB/s |    60679215 | 28.63 |
+| zstd_fast 1.5.6 --5     |   573 MB/s |  1948 MB/s |   103093752 | 48.64 |
+| zstd_fast 1.5.6 --4     |   542 MB/s |  1905 MB/s |    98825267 | 46.63 |
+| zstd_fast 1.5.6 --3     |   518 MB/s |  1818 MB/s |    94674672 | 44.67 |
+| zstd_fast 1.5.6 --2     |   489 MB/s |  1773 MB/s |    90474358 | 42.69 |
+| zstd_fast 1.5.6 --1     |   459 MB/s |  1716 MB/s |    86984009 | 41.04 |
+| zstd 1.5.6 -1           |   421 MB/s |  1342 MB/s |    73421914 | 34.64 |
+| zstd 1.5.6 -2           |   344 MB/s |  1241 MB/s |    69503444 | 32.79 |
+| zstd 1.5.6 -3           |   250 MB/s |  1210 MB/s |    66523842 | 31.39 |
+| zstd 1.5.6 -4           |   214 MB/s |  1192 MB/s |    65323637 | 30.82 |
+| zstd 1.5.6 -5           |   125 MB/s |  1194 MB/s |    63040310 | 29.74 |
+| zstd 1.5.6 -6           |  91.7 MB/s |  1272 MB/s |    61540426 | 29.04 |
+| zstd 1.5.6 -7           |  80.7 MB/s |  1283 MB/s |    60546558 | 28.57 |
+| zstd 1.5.6 -8           |  64.1 MB/s |  1316 MB/s |    60015064 | 28.32 |
+| zstd 1.5.6 -9           |  61.9 MB/s |  1306 MB/s |    59375344 | 28.01 |
+| zstd 1.5.6 -10          |  48.0 MB/s |  1323 MB/s |    58675464 | 27.68 |
+| zstd 1.5.6 -11          |  34.5 MB/s |  1339 MB/s |    58262299 | 27.49 |
+| zstd 1.5.6 -12          |  31.8 MB/s |  1339 MB/s |    58206982 | 27.46 |
+| zstd 1.5.6 -13          |  14.2 MB/s |  1343 MB/s |    57986550 | 27.36 |
+| zstd 1.5.6 -14          |  11.3 MB/s |  1360 MB/s |    57575723 | 27.17 |
+| zstd 1.5.6 -15          |  8.39 MB/s |  1368 MB/s |    57168834 | 26.97 |
+| zstd 1.5.6 -16          |  6.13 MB/s |  1255 MB/s |    55304789 | 26.09 |
+| zstd 1.5.6 -17          |  4.76 MB/s |  1226 MB/s |    54243339 | 25.59 |
+| zstd 1.5.6 -18          |  3.76 MB/s |  1164 MB/s |    53329873 | 25.16 |
+| zstd 1.5.6 -19          |  2.98 MB/s |  1147 MB/s |    52875116 | 24.95 |
+| zstd 1.5.6 -20          |  2.73 MB/s |  1079 MB/s |    52456743 | 24.75 |
+| zstd 1.5.6 -21          |  2.40 MB/s |  1075 MB/s |    52344203 | 24.70 |
+| zstd 1.5.6 -22          |  2.09 MB/s |  1071 MB/s |    52333880 | 24.69 |
+| zlib 1.3.1 -1           |  93.2 MB/s |   323 MB/s |    77259029 | 36.45 |
+| zlib 1.3.1 -2           |  83.4 MB/s |   333 MB/s |    75002277 | 35.39 |
+| zlib 1.3.1 -3           |  60.3 MB/s |   344 MB/s |    72967040 | 34.43 |
+| zlib 1.3.1 -4           |  58.4 MB/s |   334 MB/s |    71002817 | 33.50 |
+| zlib 1.3.1 -5           |  39.2 MB/s |   337 MB/s |    69161685 | 32.63 |
+| zlib 1.3.1 -6           |  25.3 MB/s |   344 MB/s |    68228431 | 32.19 |
+| zlib 1.3.1 -7           |  20.3 MB/s |   345 MB/s |    67939647 | 32.05 |
+| zlib 1.3.1 -8           |  13.1 MB/s |   347 MB/s |    67693427 | 31.94 |
+| zlib 1.3.1 -9           |  10.3 MB/s |   348 MB/s |    67644548 | 31.92 |
+| brotli 1.1.0 -0         |   341 MB/s |   352 MB/s |    78433298 | 37.01 |
+| brotli 1.1.0 -1         |   234 MB/s |   379 MB/s |    73499222 | 34.68 |
+| brotli 1.1.0 -2         |   139 MB/s |   415 MB/s |    68069489 | 32.12 |
+| brotli 1.1.0 -3         |   116 MB/s |   429 MB/s |    67392492 | 31.80 |
+| brotli 1.1.0 -4         |  80.3 MB/s |   452 MB/s |    64122989 | 30.25 |
+| brotli 1.1.0 -5         |  36.9 MB/s |   450 MB/s |    59555446 | 28.10 |
+| brotli 1.1.0 -6         |  26.9 MB/s |   457 MB/s |    58470465 | 27.59 |
+| brotli 1.1.0 -7         |  17.5 MB/s |   472 MB/s |    57688191 | 27.22 |
+| brotli 1.1.0 -8         |  12.4 MB/s |   476 MB/s |    57148304 | 26.96 |
+| brotli 1.1.0 -9         |  9.19 MB/s |   480 MB/s |    56703946 | 26.75 |
+| brotli 1.1.0 -10        |  1.25 MB/s |   345 MB/s |    51720800 | 24.40 |
+| brotli 1.1.0 -11        |  0.58 MB/s |   387 MB/s |    50407795 | 23.78 |
 
-[silesia.tar]: https://drive.google.com/file/d/0BwX7dtyRLxThenZpYU9zLTZhR1k/view?usp=sharing
+
+Automatic CI/CD testing
+-------------------------
+
+lizard undergoes automated testing using Azure Pipelines with the following compilers:
+- Ubuntu: gcc (versions 7.5 to 14.2) and clang (versions 6.0 to 19), gcc 14.2 (32-bit)
+- MacOS: Apple LLVM version 15.0.0
+- Windows: mingw32-gcc 14.2.0 (32-bit) and mingw64-gcc 14.2.0 (64-bit)
+- Cross-compilation: gcc for ARM (32-bit and 64-bit) and PowerPC (32-bit and 64-bit)
+- Visual Studio 2019 / 2022 (32-bit and 64-bit)
 
 
 Documentation
